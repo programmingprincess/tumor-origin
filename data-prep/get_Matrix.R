@@ -7,8 +7,10 @@
 
 #change directory to a directory containing files to update and accessionTOname file i.e.: > setwd("Desktop/miRdata/")
 
+#setwd("~/Desktop/tumor-origin/data")
+
 library(splitstackshape)
-library(qdap)
+#library(qdap)
 library(plyr)
 library(reshape)
 
@@ -20,18 +22,22 @@ update_miRname = function(infile)
   tempFile =cSplit(tempFile, "miRNA_region", sep=",")
   full_list = read.table("hsa_miR_accessionTOname.txt", header=TRUE, stringsAsFactors=FALSE)
   
-  tempFile$fullName = lookup(tempFile$miRNA_region_2, full_list$Alias, full_list$Name)
-  temp2 = data.frame(tempFile$fullName, tempFile$read_count)
+  # change Alias to match column title in tempFile
+  full_list = setNames(full_list,c('miRNA_region_2','fullName'))
+  mergedFile = merge(tempFile, full_list, by.x="miRNA_region_2", by.y="miRNA_region_2")
+  
+  #tempFile$fullName = lookup(tempFile$miRNA_region_2, full_list$Alias, full_list$Name)
+  temp2 = data.frame(mergedFile$fullName, mergedFile$read_count)
   colnames(temp2) = c("miRNA", "Count")
-  write.table(tempFile, file=paste(infile, ".names.txt", sep=""),sep="\t",col.names=TRUE, row.names=FALSE)
-  write.table(temp2, file=paste(infile, ".counts.txt", sep=""),sep="\t",col.names=TRUE, row.names=FALSE)
+  write.table(tempFile, file=paste("temp/", infile, ".names.txt", sep=""),sep="\t",col.names=TRUE, row.names=FALSE)
+  write.table(temp2, file=paste("temp/", infile, ".counts.txt", sep=""),sep="\t",col.names=TRUE, row.names=FALSE)
   
   
   temp3 = temp2[!(is.na(temp2[,1])),]
   temp3 = temp3[order(temp3[,1]), ]
   temp3 = aggregate(data=temp3, temp3[,2] ~ temp3[,1], FUN=sum)
   colnames(temp3) = c("miRNA", infile)
-  write.table(temp3, file=paste(infile, ".sumSort.txt", sep=""),sep="\t",col.names=TRUE, row.names=FALSE)
+  write.table(temp3, file=paste("temp/", infile, ".sumSort.txt", sep=""),sep="\t",col.names=TRUE, row.names=FALSE)
   
 }
 
@@ -40,14 +46,14 @@ lapply(filenames, update_miRname)
 #next need to join all the data matrix files into one matrix
 
 
-mergeFiles = list.files(pattern="*sumSort.txt")
+mergeFiles = list.files(path="temp/", pattern="*sumSort.txt")
 for (file in mergeFiles){
   if(!exists("mirNames")){
-    mirNames = read.table(file, header=TRUE, stringsAsFactors=FALSE)
+    mirNames = read.table(paste("temp/", file, sep=""), header=TRUE, stringsAsFactors=FALSE)
     dim(mirNames)
   }
   if(exists("mirNames")){
-    temp_dataset = read.table(file, header=TRUE, stringsAsFactors=FALSE)
+    temp_dataset = read.table(paste("temp/", file, sep=""), header=TRUE, stringsAsFactors=FALSE)
     mirNames = rbind.fill(mirNames, temp_dataset)
     rm(temp_dataset)
   } 
@@ -61,8 +67,12 @@ colnames(mirNames) = "miRNA"
 
 # merge each file with this generated names column, putting zero if no match
 
+#setwd("~/Desktop/tumor-origin/data/temp")
 
-import.list <- llply(mergeFiles, read.table, header=TRUE)
+#append temp/ to path of sumSort files 
+mergeFiles <- paste("temp/", mergeFiles, sep="")
+
+import.list <- llply(mergeFiles, read.table, check.names=FALSE, header=TRUE)
 
 data_matrix =join(mirNames, as.data.frame(import.list[1]), by= "miRNA", type="left")
 
@@ -70,7 +80,51 @@ for(i in 2:length(mergeFiles)){
   data_matrix =join(data_matrix, as.data.frame(import.list[i]), by= "miRNA", type="left")
 }
 
-
 data_matrix[is.na(data_matrix)] = 0
 
 write.table(data_matrix, file="miR_counts_matrix.txt", sep="\t", col.names=TRUE, row.names=FALSE)
+
+# transpose!! 
+# rows = samples 
+# columns = features 
+t_df <- data.frame(t(data_matrix[-1]))
+colnames(t_df) <- data_matrix[,1]
+#df2 <- data.frame(t(data_matrix[-1]))
+#colnames(df2) <- data_matrix[,1]
+
+#col.names=NA creates a header for row names...
+write.table(t_df, file="miR_counts_transposed.txt", sep="\t", col.names=NA, row.names=TRUE)
+
+#######################################
+# get tumor/normal and add as a column! 
+#######################################
+
+# add tumor/normal sample labels 
+labels <- read.table("sample_labels.txt",  header=FALSE, stringsAsFactors=FALSE, sep="\t")
+colnames(labels) <- c("file", "sample type")
+
+# get file substring for LABELS and replace - with . for comparison
+labels$file <- gsub("-", ".", labels$file)
+labels$file <- substring(labels$file,1,36)
+
+# get file substring for DATAMATRIX
+newLabels <- list()
+i <- 1
+for(sample in rownames(t_df)) {
+  if(substring(sample,1,1) == "X") {
+    sample <- substring(sample,2,37)
+  } else {
+    sample <- substring(sample,1,36)
+  }
+  newLabels[i] = sample
+  i<-i+1
+}
+newLabels <- data.frame(newLabels, stringsAsFactors = FALSE)
+rownames(t_df) <- newLabels
+t_df$file <- rownames(t_df)
+
+
+# Merge by sample name (file name)
+labeled_data <- merge(t_df,labels,by="file")
+
+write.table(labeled_data, file="miR_counts_labeled.txt", sep="\t", col.names=NA, row.names=TRUE)
