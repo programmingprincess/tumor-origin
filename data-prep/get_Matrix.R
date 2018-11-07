@@ -27,7 +27,8 @@ update_miRname = function(infile)
   mergedFile = merge(tempFile, full_list, by.x="miRNA_region_2", by.y="miRNA_region_2")
   
   #tempFile$fullName = lookup(tempFile$miRNA_region_2, full_list$Alias, full_list$Name)
-  temp2 = data.frame(mergedFile$fullName, mergedFile$read_count)
+  #temp2 = data.frame(mergedFile$fullName, mergedFile$read_count)
+  temp2 = data.frame(mergedFile$fullName, mergedFile$reads_per_million_miRNA_mapped)
   colnames(temp2) = c("miRNA", "Count")
   write.table(tempFile, file=paste("temp/", infile, ".names.txt", sep=""),sep="\t",col.names=TRUE, row.names=FALSE)
   write.table(temp2, file=paste("temp/", infile, ".counts.txt", sep=""),sep="\t",col.names=TRUE, row.names=FALSE)
@@ -82,7 +83,7 @@ for(i in 2:length(mergeFiles)){
 
 data_matrix[is.na(data_matrix)] = 0
 
-write.table(data_matrix, file="miR_counts_matrix.txt", sep="\t", col.names=TRUE, row.names=FALSE)
+write.table(data_matrix, file="miR_expression_matrix.txt", sep="\t", col.names=TRUE, row.names=FALSE)
 
 # transpose!! 
 # rows = samples 
@@ -93,7 +94,7 @@ colnames(t_df) <- data_matrix[,1]
 #colnames(df2) <- data_matrix[,1]
 
 #col.names=NA creates a header for row names...
-write.table(t_df, file="miR_counts_transposed.txt", sep="\t", col.names=NA, row.names=TRUE)
+write.table(t_df, file="miR_expression_transposed.txt", sep="\t", col.names=NA, row.names=TRUE)
 
 #######################################
 # get tumor/normal and add as a column! 
@@ -127,4 +128,4 @@ t_df$file <- rownames(t_df)
 # Merge by sample name (file name)
 labeled_data <- merge(t_df,labels,by="file")
 
-write.table(labeled_data, file="miR_counts_labeled.txt", sep="\t", col.names=NA, row.names=TRUE)
+write.table(labeled_data, file="expression_matrix_labeled.txt", sep="\t", col.names=NA, row.names=TRUE)

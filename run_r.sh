@@ -2,7 +2,7 @@
 #PBS -k o 
 #PBS -l nodes=1:ppn=1,walltime=90:00 
 #PBS -M jiaqiwu6@illinois.edu
-#PBS -N rGetDataMatrix2
+#PBS -N rGetDataMatrix
 
 cd $PBS_O_WORKDIR
 
