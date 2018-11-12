@@ -86,6 +86,7 @@ t_data$type <- as.factor(t_data$type)
 t_data[is.na(t_data)] <- 0
 
 # split into train and test 
+n = nrow(t_data)
 set.seed(30)
 ntrain = floor(n*0.70)  # 70% train
 ii=sample(1:n, ntrain)
@@ -103,13 +104,30 @@ names(t_data) <- gsub(pattern='-', replacement='_', x=names(t_data))
 # second parameter is first part of dim(data) + 1 to show last col (type)
 t_data[c(1, 437,1644,1689,2154,2354),1:3]
 
-# random forest for feaaaaature selection 
-library(randomForest)
-rfmodel <- randomForest(type ~ ., data=t_data_train, importance=TRUE, do.trace=100)
-rfmodel
+# columns that have at least N values that do not equal 0 
+fs <- t_data[, which(colSums(t_data != 0) > 1000)] 
+# split into train and test 
+n = nrow(fs)
+set.seed(30)
+ntrain = floor(n*0.70)  # 70% train
+ii=sample(1:n, ntrain)
 
-rfpred <- predict(rfmodel, newdata=t_data_test)
-table(rfpred,t_data_test$type)
+fs_train = fs[ii,]
+fs_test = fs[-ii,]
+
+# random forest for feaaaaature selection 
+# library(randomForest)
+# rfmodel <- randomForest(type ~ ., data=t_data_train, importance=TRUE, do.trace=100)
+# rfmodel 
+library(randomForest)
+rfmodel <- randomForest(type ~ ., data=fs_train, importance=TRUE, do.trace=100)
+rfmodel 
+
+
+# rfpred <- predict(rfmodel, newdata=t_data_test)
+# table(rfpred,t_data_test$type)
+rfpred <- predict(rfmodel, newdata=fs_test)
+table(rfpred,fs_test$type)
 
 # rfpred blca brca chol coad esca
 # blca  108    0    0    0   17
@@ -120,14 +138,21 @@ table(rfpred,t_data_test$type)
 # > (108+362+12+155+44)/nrow(t_data_test)
 # [1] 0.9632249
 
-# library(pROC)
-# roc(r$y, r$votes)
-
 # show importance 
 rn <- round(importance(rfmodel), 2)
 rn
 head(rn[order(rn[,6],decreasing=TRUE),],10)
 
 
-library(nnet)
-nnmodel = nnet(type ~ ., t_data,size=5,decay=.1,maxit=1000)
+#library(nnet)
+# nnmodel = nnet(type ~ ., t_data,size=5,decay=.1,maxit=1000)
+nnmodel = nnet(type ~ ., fs_test,size=5,decay=.1,maxit=1000,MaxNWts=3655)
+nnyhat = predict(nnmodel, t_data_test,type="class")
+
+table(nnyhat,fs_test$type)
+
+
+library(ggplot2)
+# ggplot(aes(y=hsa_miR_944, x = type), data = t_data) + geom_boxplot()
+
+
