@@ -101,15 +101,19 @@ ov_data = getData("miR_counts_ov.txt")
 ncol(ov_data)
 
 
-## merge datasets 
-data_list = list(blca_data, brca_data, chol_data, coad_data, esca_data, hnsc_data, kich_data, kirc_data, lich_data, luad_data, prad_data, thca_data, ucec_data, paad_data, skcm_data, ov_data);
-
-# data <- blca_data
+# merge datasets
+# fs_data_list = list(fs_blca_data, fs_brca_data, fs_chol_data, fs_coad_data, fs_esca_data, fs_hnsc_data, fs_kich_data, fs_kirc_data, fs_lich_data, fs_luad_data, fs_prad_data, fs_thca_data, fs_ucec_data, fs_paad_data, fs_skcm_data, fs_ov_data);
 # 
-# for(i in 2:length(data_list)) {
-#   data = merge(data, data_list[[i]])
-#   row.names(data) <- data$Row.names
-#   data <- data[,-1]
+# fs_data <- fs_blca_data
+# 
+# fs_data = merge(fs_data, fs_data_list[[3]])
+# row.names(fs_data) <- fs_data$Row.names
+# fs_data <- fs_data[,-1]
+# 
+# for(i in 2:4) {
+#   fs_data = merge(fs_data, fs_data_list[[i]])
+#   row.names(fs_data) <- fs_data$Row.names
+#   fs_data <- fs_data[,-1]
 # }
 
 
