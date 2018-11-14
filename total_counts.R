@@ -42,6 +42,10 @@ ncol(brca_data)
 chol_data = getData("miR_counts_chol.txt")
 ncol(chol_data)
 
+## COAD: colon
+coad_data = getData("miR_counts_coad.txt")
+ncol(coad_data)
+
 ## ESCA: esophagus 
 esca_data = getData("miR_counts_esca.txt")
 ncol(esca_data)
@@ -95,3 +99,44 @@ ncol(skcm_data)
 ## OV: ovary 
 ov_data = getData("miR_counts_ov.txt")
 ncol(ov_data)
+
+
+## merge datasets 
+data_list = list(blca_data, brca_data, chol_data, coad_data, esca_data, hnsc_data, kich_data, kirc_data, lich_data, luad_data, prad_data, thca_data, ucec_data, paad_data, skcm_data, ov_data);
+
+# data <- blca_data
+# 
+# for(i in 2:length(data_list)) {
+#   data = merge(data, data_list[[i]])
+#   row.names(data) <- data$Row.names
+#   data <- data[,-1]
+# }
+
+
+removeNA <- function(temp_data, print=TRUE) {
+  cat(paste("Before:", nrow(temp_data), "features", "\n", sep="\t"))
+  # miRNAs that have at least 70% sample values that do not equal 0 
+  # sample values are the column, hence ncol(temp_data)
+  fs <- temp_data[rowSums(temp_data!=0) > round(ncol(temp_data)*.70),] 
+  cat(paste("After:", nrow(fs), "features", "\n", sep="\t"))
+  return (fs)
+}
+
+fs_blca_data = removeNA(blca_data)
+fs_brca_data = removeNA(brca_data)
+fs_chol_data = removeNA(chol_data)
+fs_coad_data = removeNA(coad_data)
+fs_esca_data = removeNA(esca_data)
+fs_hnsc_data = removeNA(hnsc_data)
+fs_kich_data = removeNA(kich_data)
+fs_kirc_data = removeNA(kirc_data)
+fs_lich_data = removeNA(lich_data)
+fs_luad_data = removeNA(luad_data)
+fs_prad_data = removeNA(prad_data)
+fs_stad_data = removeNA(stad_data)
+fs_thca_data = removeNA(thca_data)
+fs_ucec_data = removeNA(ucec_data)
+
+fs_paad_data = removeNA(paad_data)
+fs_skcm_data = removeNA(skcm_data)
+fs_ov_data = removeNA(ov_data)
