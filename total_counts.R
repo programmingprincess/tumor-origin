@@ -144,3 +144,31 @@ fs_ucec_data = removeNA(ucec_data)
 fs_paad_data = removeNA(paad_data)
 fs_skcm_data = removeNA(skcm_data)
 fs_ov_data = removeNA(ov_data)
+
+dim(fs_blca_data)
+
+#########################################################
+## Data below has been merged using nano_total_counts.R 
+## Using the feature selected values 
+########################################################
+
+data = read.table("merged_all.txt", header=TRUE, stringsAsFactors=FALSE)
+data_labeled = read.table("merged_all_labeled.txt", header=TRUE, stringsAsFactors=FALSE)
+
+data_labeled$type <- as.factor(data_labeled$type)
+
+####################################################
+## Model Training
+####################################################
+
+n = nrow(data_labeled)
+set.seed(30)
+ntrain = floor(n*0.70)  # 70% train
+ii=sample(1:n, ntrain)
+
+data_train = data_labeled[ii,]
+data_test = data_labeled[-ii,]
+
+library(randomForest)
+rfmodel <- randomForest(type ~ ., data=data_train, importance=TRUE, do.trace=100)
+
