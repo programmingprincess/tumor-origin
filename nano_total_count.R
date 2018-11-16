@@ -215,7 +215,7 @@ data <- merge(data, fs_ov_data, by="row.names", all=T)
 row.names(data) <- data$Row.names
 data <- data[,-1]
 
-write.table(data, file="merged_all.txt", sep="\t", col.names=TRUE, row.names=TRUE)
+# write.table(data, file="merged_all.txt", sep="\t", col.names=TRUE, row.names=TRUE)
 
 t_data = t(data)
 t_data = as.data.frame(t_data)

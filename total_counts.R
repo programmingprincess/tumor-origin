@@ -121,9 +121,9 @@ removeNA <- function(temp_data, print=TRUE) {
   cat(paste("Before:", nrow(temp_data), "features", "\n", sep="\t"))
   # miRNAs that have at least 70% sample values that do not equal 0 
   # sample values are the column, hence ncol(temp_data)
-  fs <- temp_data[rowSums(temp_data!=0) > round(ncol(temp_data)*.70),] 
-  cat(paste("After:", nrow(fs), "features", "\n", sep="\t"))
-  return (fs)
+  #temp_data <- temp_data[rowSums(temp_data!=0) > round(ncol(temp_data)*.70),] 
+  cat(paste("After:", nrow(temp_data), "features", "\n", sep="\t"))
+  return (temp_data)
 }
 
 fs_blca_data = removeNA(blca_data)
@@ -160,15 +160,25 @@ data_labeled$type <- as.factor(data_labeled$type)
 ####################################################
 ## Model Training
 ####################################################
-
+# split into train and test 
 n = nrow(data_labeled)
 set.seed(30)
-ntrain = floor(n*0.70)  # 70% train
+ntrain = floor(n*0.50)  # 70% train
 ii=sample(1:n, ntrain)
 
 data_train = data_labeled[ii,]
 data_test = data_labeled[-ii,]
 
+
 library(randomForest)
 rfmodel <- randomForest(type ~ ., data=data_train, importance=TRUE, do.trace=100)
 
+save(rfmodel, file="rfmodel_11152018.RData")
+capture.output(rfmodel, file="rfModel_11152018.txt")
+
+rfpred <- predict(rfmodel, newdata=data_test)
+table(rfpred,data_test$type)
+
+rn <- round(importance(rfmodel), 2)
+rn
+#head(rn[order(rn[,6],decreasing=TRUE),],10)

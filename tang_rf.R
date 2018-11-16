@@ -79,20 +79,12 @@ dim(data)
 t_data = t(data)
 t_data = as.data.frame(t_data)
 # add label rows to the cancer type
-t_data$type <- c(rep('blca',437), rep('brca',1207), rep('chol',45), rep('coad',465), rep('esca',200))
+t_data$type <- c(rep('blca',ncol(blca_data)), rep('brca',ncol(brca_data)), rep('chol',ncol(chol_data)), rep('coad',ncol(coad_data)), rep('esca',ncol(esca_data)))
+
 t_data$type <- as.factor(t_data$type)
 # make all NA zero
 # TODO: should we do this?
 t_data[is.na(t_data)] <- 0
-
-# split into train and test 
-n = nrow(t_data)
-set.seed(30)
-ntrain = floor(n*0.70)  # 70% train
-ii=sample(1:n, ntrain)
-
-t_data_train = t_data[ii,]
-t_data_test = t_data[-ii,]
 
 # undersampling example
 # t_train_undersample = subset(t_data_train, type != "brca")
@@ -102,18 +94,18 @@ names(t_data) <- gsub(pattern='-', replacement='_', x=names(t_data))
 
 # check data frame
 # second parameter is first part of dim(data) + 1 to show last col (type)
-t_data[c(1, 437,1644,1689,2154,2354),1:3]
+t_data[c(1, 437,1644,1689,2154,2354),2308:2309]
 
 # columns that have at least N values that do not equal 0 
-fs <- t_data[, which(colSums(t_data != 0) > 1000)] 
+#fs <- t_data[, which(colSums(t_data != 0) > 1000)] 
 # split into train and test 
-n = nrow(fs)
+n = nrow(t_data)
 set.seed(30)
 ntrain = floor(n*0.70)  # 70% train
 ii=sample(1:n, ntrain)
 
-fs_train = fs[ii,]
-fs_test = fs[-ii,]
+fs_train = t_data[ii,]
+fs_test = t_data[-ii,]
 
 # random forest for feaaaaature selection 
 # library(randomForest)
