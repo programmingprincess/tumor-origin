@@ -86,6 +86,12 @@ rfroc <- roc(data_test$type, rfpred[,2]) # Draw ROC curve.
 plot(rfroc, print.thres="best", print.thres.best.method="closest.topleft")
 auc(rfroc)
 
+library(nnet)
+nnmodel = nnet(type ~ ., data_train,size=5,decay=.1,maxit=100,MaxNWts=12122)
+#nnyhat = predict(nnmodel, t_data_test,type="class")
+
+table(nnyhat,fs_test$type)
+
 
 
 doRF <- function(cancer,npar=TRUE,print=TRUE) {
