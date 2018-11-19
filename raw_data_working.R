@@ -232,6 +232,8 @@ t_data[is.na(t_data)] <- 0
 
 names(t_data) <- gsub(pattern='-', replacement='_', x=names(t_data))
 
+write.table(t_data, file="raw_table_labeled.txt", sep="\t", col.names=TRUE, row.names=TRUE)
+
 ####################################################
 ## Model Training
 ####################################################

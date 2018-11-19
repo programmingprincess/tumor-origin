@@ -1,0 +1,48 @@
+---
+title: "Tumor origin classification"
+output: html_notebook
+---
+
+#output: html_notebook
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Cmd+Shift+Enter*. 
+
+Gather labeled data matrix, pre-computed from a different script. 
+
+```{r}
+
+t_data <- read.table("raw_table_labeled.txt", header=TRUE, stringsAsFactors=FALSE)
+t_data <- as.data.frame(t_data)
+
+t_data$type <- as.factor(t_data$type)
+dim(t_data)
+```
+
+Train the model. First split into 50/50 train and test. Then use random forest as a baseline. 
+
+```{r}
+# split into train and test 
+n = nrow(t_data)
+set.seed(30)
+ntrain = floor(n*0.50)  # 70% train
+ii=sample(1:n, ntrain)
+
+data_train = t_data[ii,]
+data_test = t_data[-ii,]
+
+
+library(randomForest)
+rfmodel <- randomForest(type ~ ., data=data_train, importance=TRUE, do.trace=100)
+rfmodel 
+```
+
+Error is highest for ESCA (41.18%) and lowest for BRCA (0.002%)
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Cmd+Option+I*.
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Cmd+Shift+K* to preview the HTML file). 
+
+The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
+

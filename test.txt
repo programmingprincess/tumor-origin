@@ -1,4 +1,0 @@
-lol	sample1	sample2	sample3
-feature1	1	4	5	
-feature2	0	30	0	
-feature3	0	0	0

@@ -1,0 +1,27 @@
+
+Call:
+ randomForest(formula = type ~ ., data = data_train, importance = TRUE,      do.trace = 100) 
+               Type of random forest: classification
+                     Number of trees: 500
+No. of variables tried at each split: 29
+
+        OOB estimate of  error rate: 0.07%
+Confusion matrix:
+     blca brca chol coad esca hnsc kich kirc lich luad  ov paad prad skcm stad thca ucec class.error
+blca  299    0    0    0    0    0    0    0    0    0   0    0    0    0    0    0    0 0.000000000
+brca    0  857    0    0    0    0    0    0    0    0   0    0    0    0    0    0    0 0.000000000
+chol    0    0   33    0    0    0    0    0    0    0   0    0    0    0    0    0    0 0.000000000
+coad    0    0    0  321    0    0    0    0    0    0   0    0    0    0    0    0    0 0.000000000
+esca    0    0    0    0  143    0    0    0    0    0   0    0    0    0    0    0    0 0.000000000
+hnsc    1    0    0    0    0  398    0    0    0    0   0    0    0    0    0    0    0 0.002506266
+kich    0    0    0    0    0    0   66    0    0    0   0    0    0    0    0    0    0 0.000000000
+kirc    0    0    0    0    0    0    0  435    0    0   0    0    0    0    0    0    0 0.000000000
+lich    0    0    0    0    0    0    0    0  310    0   0    0    0    0    0    0    0 0.000000000
+luad    0    0    0    0    0    0    0    0    0  399   0    0    0    0    0    0    0 0.000000000
+ov      0    0    0    0    0    0    0    0    0    0 372    0    0    0    0    0    0 0.000000000
+paad    0    0    0    0    0    0    0    0    0    0   0  113    0    0    1    0    0 0.008771930
+prad    0    0    0    0    0    0    0    0    0    0   0    0  401    0    0    0    0 0.000000000
+skcm    0    0    0    0    0    0    0    0    0    0   0    0    0  291    0    0    0 0.000000000
+stad    0    0    0    1    0    0    0    0    0    0   0    0    0    0  331    0    0 0.003012048
+thca    0    0    0    0    0    0    0    0    0    0   0    0    0    0    0  384    0 0.000000000
+ucec    0    1    0    0    0    0    0    0    0    0   0    0    0    0    0    0  408 0.002444988

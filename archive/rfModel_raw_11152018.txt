@@ -1,0 +1,27 @@
+
+Call:
+ randomForest(formula = type ~ ., data = data_train, importance = TRUE,      do.trace = 100) 
+               Type of random forest: classification
+                     Number of trees: 500
+No. of variables tried at each split: 49
+
+        OOB estimate of  error rate: 4.4%
+Confusion matrix:
+     blca brca chol coad esca hnsc kich kirc lich luad  ov paad prad skcm stad thca ucec class.error
+blca  199   11    0    0    0    0    0    0    0    0   0    0    0    0    0    0    1 0.056872038
+brca    1  644    0    0    0    0    0    0    0    0   0    0    0    0    0    0    0 0.001550388
+chol    0    1   20    1    1    0    0    0    0    0   0    0    0    0    0    0    0 0.130434783
+coad    0    0    0  230    0    0    0    0    0    0   2    0    0    0    0    0    0 0.008620690
+esca   28    2    0   11   60    0    0    0    0    0   0    0    0    0    1    0    0 0.411764706
+hnsc    3    2    0    0    0  259    0    0    0    1   0    0    1    1    0    0    2 0.037174721
+kich    0    0    0    0    0    0   39    4    0    0   0    0    0    0    0    0    2 0.133333333
+kirc    0    2    0    0    0    0    2  314    0    1   0    0    0    0    0    0    0 0.015673981
+lich    0    0    0    1    0    0    0    0  206    0   0    0    0    1    0    0    0 0.009615385
+luad    1   12    0    0    0    1    0    0    0  256   3    0    0    0    4    0    6 0.095406360
+ov      0    0    0    0    0    0    0    0    0    0 262    0    0    0    0    0    4 0.015037594
+paad    0    1    0    0    0    1    0    1    0    2   0   72    0    1    8    0    0 0.162790698
+prad    0    2    0    0    0    0    0    0    0    0   0    0  286    0    0    0    1 0.010380623
+skcm    0    0    0    0    0    2    0    0    0    0   0    0    0  198    0    0    0 0.010000000
+stad    0    0    0   11    2    3    0    0    0    1   0    1    0    0  216    0    0 0.076923077
+thca    0    0    0    0    0    0    0    0    0    1   0    0    0    0    0  284    0 0.003508772
+ucec    0   13    0    1    0    0    0    3    0    2   0    0    0    1    3    0  255 0.082733813
