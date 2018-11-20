@@ -78,6 +78,10 @@ rfmodel <- randomForest(type ~ ., data=data_train, importance=TRUE, do.trace=100
 # rn
 #head(rn[order(rn[,6],decreasing=TRUE),],10)
 
+##################################################
+## Random Forest 
+##################################################
+
 rfpred <- predict(rfmodel, newdata=data_test, type="prob")
 table(rfpred,data_test$type)
 
@@ -86,13 +90,29 @@ rfroc <- roc(data_test$type, rfpred[,2]) # Draw ROC curve.
 plot(rfroc, print.thres="best", print.thres.best.method="closest.topleft")
 auc(rfroc)
 
+
+##################################################
+## Neural Net
+##################################################
+
 library(nnet)
-nnmodel = nnet(type ~ ., data_train,size=5,decay=.1,maxit=100,MaxNWts=12122)
-#nnyhat = predict(nnmodel, t_data_test,type="class")
+nnmodel = nnet(type ~ ., data_train,size=5,decay=.1,maxit=1000,MaxNWts=12122)
 
-table(nnyhat,fs_test$type)
+## AUC 
+nnraw = predict(nnmodel, data_test,type="raw")
+nnroc <- roc(data_test$type, nnraw[,2]) # Draw ROC curve.
 
+plot(nnroc, print.thres="best", print.thres.best.method="closest.topleft",print.auc = TRUE,col="blue")
+auc(nnroc)
 
+## Confusion Matrix
+nnclass = predict(nnmodel, data_test,type="class")
+table(nnclass,data_test$type)
+
+## lol idk 
+rs <- lolroc[['rocs']]
+plot.roc(rs[[1]])
+sapply(2:length(rs),function(i) lines.roc(rs[[i]],col=i))
 
 doRF <- function(cancer,npar=TRUE,print=TRUE) {
   #COUNT number of brca, blca...etc. 
