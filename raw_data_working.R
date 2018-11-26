@@ -225,27 +225,30 @@ data <- data[,-1]
 
 t_data = t(data)
 t_data = as.data.frame(t_data)
-
-#t_data$type <- as.factor(t_data$type)
+#t_data$type <- c(rep('blca',ncol(fs_blca_data)), rep('brca',ncol(fs_brca_data)),rep('chol',ncol(fs_chol_data)), rep('coad',ncol(fs_coad_data)),rep('esca',ncol(fs_esca_data)),rep('hnsc',ncol(fs_hnsc_data)),rep('kich', ncol(fs_kich_data)),rep('kirc',ncol(fs_kirc_data)),rep('lich', ncol(fs_lich_data)),rep('luad',ncol(fs_luad_data)),rep('prad',ncol(fs_prad_data)),rep('stad',ncol(fs_stad_data)),rep('thca',ncol(fs_thca_data)),rep('ucec',ncol(fs_ucec_data)),rep('paad',ncol(fs_paad_data)),rep('skcm',ncol(fs_skcm_data)),rep('ov',ncol(fs_ov_data))) 
+t_data$type <- c(rep('1',ncol(fs_blca_data)), rep('2',ncol(fs_brca_data)),rep('3',ncol(fs_chol_data)), rep('4',ncol(fs_coad_data)),rep('5',ncol(fs_esca_data)),rep('6',ncol(fs_hnsc_data)),rep('7', ncol(fs_kich_data)),rep('8',ncol(fs_kirc_data)),rep('9', ncol(fs_lich_data)),rep('10',ncol(fs_luad_data)),rep('11',ncol(fs_prad_data)),rep('12',ncol(fs_stad_data)),rep('13',ncol(fs_thca_data)),rep('14',ncol(fs_ucec_data)),rep('15',ncol(fs_paad_data)),rep('16',ncol(fs_skcm_data)),rep('0',ncol(fs_ov_data))) 
+t_data$type <- as.factor(t_data$type)
 t_data[is.na(t_data)] <- 0
 
-names(t_data) <- gsub(pattern='-', replacement='_', x=names(t_data))
+#names(t_data) <- gsub(pattern='-', replacement='_', x=names(t_data))
 
-t_data = t_data[-1]
+#t_data = t_data[-1]
 
 ### separate types for numpy 
 #type <- c(rep('blca',ncol(fs_blca_data)), rep('brca',ncol(fs_brca_data)),rep('chol',ncol(fs_chol_data)), rep('coad',ncol(fs_coad_data)),rep('esca',ncol(fs_esca_data)),rep('hnsc',ncol(fs_hnsc_data)),rep('kich', ncol(fs_kich_data)),rep('kirc',ncol(fs_kirc_data)),rep('lich', ncol(fs_lich_data)),rep('luad',ncol(fs_luad_data)),rep('prad',ncol(fs_prad_data)),rep('stad',ncol(fs_stad_data)),rep('thca',ncol(fs_thca_data)),rep('ucec',ncol(fs_ucec_data)),rep('paad',ncol(fs_paad_data)),rep('skcm',ncol(fs_skcm_data)),rep('ov',ncol(fs_ov_data))) 
-t_data$type <- c(rep('blca',ncol(fs_blca_data)), rep('brca',ncol(fs_brca_data)),rep('chol',ncol(fs_chol_data)), rep('coad',ncol(fs_coad_data)),rep('esca',ncol(fs_esca_data)),rep('hnsc',ncol(fs_hnsc_data)),rep('kich', ncol(fs_kich_data)),rep('kirc',ncol(fs_kirc_data)),rep('lich', ncol(fs_lich_data)),rep('luad',ncol(fs_luad_data)),rep('prad',ncol(fs_prad_data)),rep('stad',ncol(fs_stad_data)),rep('thca',ncol(fs_thca_data)),rep('ucec',ncol(fs_ucec_data)),rep('paad',ncol(fs_paad_data)),rep('skcm',ncol(fs_skcm_data)),rep('ov',ncol(fs_ov_data))) 
+t_data_random <- t_data[sample(nrow(t_data)),]
+
+write.table(t_data_random$type, file="types.txt", sep="\t", col.names=TRUE, row.names=TRUE)
+t_data_random$type = NULL
+write.table(t_data_random, file="raw.txt", sep="\t", col.names=TRUE, row.names=TRUE)
+
+
+write.table(t_data, file="original.txt", sep="\t", col.names=TRUE, row.names=TRUE)
 
 t_data_random <- t_data[sample(nrow(t_data)),]
 
-write.table(t_data, file="original.txt", sep="\t", col.names=TRUE, row.names=TRUE)
 write.table(t_data_random, file="random.txt", sep="\t", col.names=TRUE, row.names=TRUE)
 
-
-write.table(t_data, file="raw.txt", sep="\t", col.names=TRUE, row.names=FALSE)
-write.table(t_data, file="whole.txt", sep="\t", col.names=TRUE, row.names=FALSE)
-write.table(type, file="types.txt", sep="\t", col.names=TRUE, row.names=FALSE)
 
 ####################################################
 ## Model Training
