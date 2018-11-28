@@ -280,6 +280,8 @@ library(nnet)
 nnmodel = nnet(type ~ ., data_train,size=5,decay=.1,maxit=200,MaxNWt=12117)
 nnraw = predict(nnmodel, data_test,type="raw")
 
+# save(nnmodel, file="nnmodel_11272018.RData")
+
 nnclass = predict(nnmodel, data_test,type="class")
 nncm = table(nnclass,data_test$type)
 
