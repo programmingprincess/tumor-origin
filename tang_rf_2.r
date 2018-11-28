@@ -67,16 +67,6 @@ data_test = t_data[-ii,]
 library(randomForest)
 rfmodel <- randomForest(type ~ ., data=data_train, importance=TRUE, do.trace=100)
 
-#> (199+644+20+230+60+259+39+314+206+256+262+72+286+198+216+284+255)/nrow(data_train)
-#[1] 0.9559748
-# save(rfmodel, file="rfmodel_raw_11152018.RData")
-# capture.output(rfmodel, file="rfModel_raw_11152018.txt")
-# 
-#> (216+516+17+223+54+294+41+291+214+259+224+82+261+250+233+285+276)/nrow(data_test)
-#[1] 0.9398742
-# rn <- round(importance(rfmodel), 2)
-# rn
-#head(rn[order(rn[,6],decreasing=TRUE),],10)
 
 ##################################################
 ## Random Forest 

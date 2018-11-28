@@ -225,54 +225,73 @@ data <- data[,-1]
 
 t_data = t(data)
 t_data = as.data.frame(t_data)
-#t_data$type <- c(rep('blca',ncol(fs_blca_data)), rep('brca',ncol(fs_brca_data)),rep('chol',ncol(fs_chol_data)), rep('coad',ncol(fs_coad_data)),rep('esca',ncol(fs_esca_data)),rep('hnsc',ncol(fs_hnsc_data)),rep('kich', ncol(fs_kich_data)),rep('kirc',ncol(fs_kirc_data)),rep('lich', ncol(fs_lich_data)),rep('luad',ncol(fs_luad_data)),rep('prad',ncol(fs_prad_data)),rep('stad',ncol(fs_stad_data)),rep('thca',ncol(fs_thca_data)),rep('ucec',ncol(fs_ucec_data)),rep('paad',ncol(fs_paad_data)),rep('skcm',ncol(fs_skcm_data)),rep('ov',ncol(fs_ov_data))) 
-t_data$type <- c(rep('1',ncol(fs_blca_data)), rep('2',ncol(fs_brca_data)),rep('3',ncol(fs_chol_data)), rep('4',ncol(fs_coad_data)),rep('5',ncol(fs_esca_data)),rep('6',ncol(fs_hnsc_data)),rep('7', ncol(fs_kich_data)),rep('8',ncol(fs_kirc_data)),rep('9', ncol(fs_lich_data)),rep('10',ncol(fs_luad_data)),rep('11',ncol(fs_prad_data)),rep('12',ncol(fs_stad_data)),rep('13',ncol(fs_thca_data)),rep('14',ncol(fs_ucec_data)),rep('15',ncol(fs_paad_data)),rep('16',ncol(fs_skcm_data)),rep('0',ncol(fs_ov_data))) 
+t_data$type <- c(rep('blca',ncol(fs_blca_data)), rep('brca',ncol(fs_brca_data)),rep('chol',ncol(fs_chol_data)), rep('coad',ncol(fs_coad_data)),rep('esca',ncol(fs_esca_data)),rep('hnsc',ncol(fs_hnsc_data)),rep('kich', ncol(fs_kich_data)),rep('kirc',ncol(fs_kirc_data)),rep('lich', ncol(fs_lich_data)),rep('luad',ncol(fs_luad_data)),rep('prad',ncol(fs_prad_data)),rep('stad',ncol(fs_stad_data)),rep('thca',ncol(fs_thca_data)),rep('ucec',ncol(fs_ucec_data)),rep('paad',ncol(fs_paad_data)),rep('skcm',ncol(fs_skcm_data)),rep('ov',ncol(fs_ov_data))) 
+#t_data$type <- c(rep('1',ncol(fs_blca_data)), rep('2',ncol(fs_brca_data)),rep('3',ncol(fs_chol_data)), rep('4',ncol(fs_coad_data)),rep('5',ncol(fs_esca_data)),rep('6',ncol(fs_hnsc_data)),rep('7', ncol(fs_kich_data)),rep('8',ncol(fs_kirc_data)),rep('9', ncol(fs_lich_data)),rep('10',ncol(fs_luad_data)),rep('11',ncol(fs_prad_data)),rep('12',ncol(fs_stad_data)),rep('13',ncol(fs_thca_data)),rep('14',ncol(fs_ucec_data)),rep('15',ncol(fs_paad_data)),rep('16',ncol(fs_skcm_data)),rep('0',ncol(fs_ov_data))) 
 t_data$type <- as.factor(t_data$type)
 t_data[is.na(t_data)] <- 0
 
-#names(t_data) <- gsub(pattern='-', replacement='_', x=names(t_data))
+names(t_data) <- gsub(pattern='-', replacement='_', x=names(t_data))
 
-#t_data = t_data[-1]
-
-### separate types for numpy 
-#type <- c(rep('blca',ncol(fs_blca_data)), rep('brca',ncol(fs_brca_data)),rep('chol',ncol(fs_chol_data)), rep('coad',ncol(fs_coad_data)),rep('esca',ncol(fs_esca_data)),rep('hnsc',ncol(fs_hnsc_data)),rep('kich', ncol(fs_kich_data)),rep('kirc',ncol(fs_kirc_data)),rep('lich', ncol(fs_lich_data)),rep('luad',ncol(fs_luad_data)),rep('prad',ncol(fs_prad_data)),rep('stad',ncol(fs_stad_data)),rep('thca',ncol(fs_thca_data)),rep('ucec',ncol(fs_ucec_data)),rep('paad',ncol(fs_paad_data)),rep('skcm',ncol(fs_skcm_data)),rep('ov',ncol(fs_ov_data))) 
-t_data_random <- t_data[sample(nrow(t_data)),]
-
-write.table(t_data_random$type, file="types.txt", sep="\t", col.names=TRUE, row.names=TRUE)
-t_data_random$type = NULL
-write.table(t_data_random, file="raw.txt", sep="\t", col.names=TRUE, row.names=TRUE)
-
-
-write.table(t_data, file="original.txt", sep="\t", col.names=TRUE, row.names=TRUE)
+t_data = t_data[-1]
 
 t_data_random <- t_data[sample(nrow(t_data)),]
 
-write.table(t_data_random, file="random.txt", sep="\t", col.names=TRUE, row.names=TRUE)
+#write.table(t_data_random$type, file="types.txt", sep="\t", col.names=TRUE, row.names=TRUE)
 
+#write.table(t_data_random, file="raw.txt", sep="\t", col.names=TRUE, row.names=TRUE)
 
 ####################################################
-## Model Training
+## Split into train/test
 ####################################################
 # split into train and test 
-n = nrow(t_data)
+n = nrow(t_data_random)
 set.seed(30)
 ntrain = floor(n*0.50)  # 70% train
 ii=sample(1:n, ntrain)
 
-data_train = t_data[ii,]
-data_test = t_data[-ii,]
+data_train = t_data_random[ii,]
+data_test = t_data_random[-ii,]
 
+
+####################################################
+## Random Forest
+####################################################
 
 library(randomForest)
 rfmodel <- randomForest(type ~ ., data=data_train, importance=TRUE, do.trace=100)
 
-# save(rfmodel, file="rfmodel_11152018.RData")
-# capture.output(rfmodel, file="rfModel_11152018.txt")
-# 
-rfpred <- predict(rfmodel, newdata=data_test)
-table(rfpred,data_test$type)
+# save(rfmodel, file="rfmodel_11272018.RData")
+# capture.output(rfmodel, file="rfModel_11272018.txt")
+
+rfpred <- predict(rfmodel, data_test)
+rfcm <- table(rfpred, data_test$type)
+print(paste("Accuracy: ", sum(diag(rfcm))/nrow(data_test)))
 
 # rn <- round(importance(rfmodel), 2)
 # rn
 #head(rn[order(rn[,6],decreasing=TRUE),],10)
 
+####################################################
+## NNet 
+####################################################
+
+
+library(nnet)
+nnmodel = nnet(type ~ ., data_train,size=5,decay=.1,maxit=200,MaxNWt=12117)
+nnraw = predict(nnmodel, data_test,type="raw")
+
+nnclass = predict(nnmodel, data_test,type="class")
+nncm = table(nnclass,data_test$type)
+
+print(paste("Accuracy: ", sum(diag(nncm))/nrow(data_test)))
+
+## AUC 
+# nnraw = predict(nnmodel, data_test,type="raw")
+# nnroc <- roc(data_test$type, nnraw[,2]) # Draw ROC curve.
+# 
+# plot(nnroc, print.thres="best", print.thres.best.method="closest.topleft",print.auc = TRUE,col="blue")
+# auc(nnroc)
+
+## Confusion Matrix
+nnclass = predict(nnmodel, data_test,type="class")
+table(nnclass,data_test$type)
