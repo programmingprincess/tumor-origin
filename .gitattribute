@@ -1,8 +1,0 @@
-
-* text=auto
-
-
-# These files are text and should be normalized 
-*.gitattributes text
-.gitignore text
-*.txt text
