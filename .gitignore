@@ -1,3 +1,9 @@
 myenv
 *.un~
 .Rhistory
+*.tar.gz
+*.RData
+*.ipynb_checkpoints* 
+
+ESCA_20160128-Methylation.txt
+ov-methyl.txt
