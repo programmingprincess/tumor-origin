@@ -1,6 +1,6 @@
 source('tcga2stat.R')
 
-CODE = "BRCA"
+CODE = "LUAD"
 #methyl <- getTCGA(disease="xxxx", data.type="Methylation", type="450K")
 methyl <- getTCGA(disease=CODE, data.type="Methylation")
 
@@ -10,7 +10,7 @@ save(methyl, file=paste0("r-obj-",CODE,".Rdata"))
 data = methyl$dat 
 print(dim(data))
 
-#write.table(data,file=paste0(TCGA,"-methyl",".txt"), append = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+write.table(data,file=paste0(CODE,"-methyl",".txt"), append = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
 
 samples <- colnames(data)
 parsed <- strsplit(samples,"-")
