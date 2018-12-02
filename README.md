@@ -5,12 +5,12 @@
 #### MicroRNA  
 * Download isoforms from 17 different classes of cancer from TCGA 
 
-###### In R, on nano cluster
+##### In R, on nano cluster
 * Put all samples of the same type into a matrix using rptashkin's TCGA miRNASeq Matrix (rows are features; columns are samples) 
 * Merge matrices 
 * Transpose 
 
-###### In Python, on nano cluster
+##### In Python, on nano cluster
 * Test random forest baseline (0.95)
 * Built keras neural network with 2 hidden layers 
 * Adjust hyperparameters to get decent accuracy 
@@ -20,17 +20,17 @@
 #### DNA Methylation 
 * Download 27k Illumina samples from TCGA using TCGA2STAT 
 
-###### In R, on nano cluster 
+##### In R, on nano cluster 
 * Merge different samples into one big matrix 
 
-###### In Python 
+##### In Python 
 * Baseline models to guage accuracy before feature selection 
 
 
-#### Todo:  
-[ ] Does feature selection improve random forest model? 
-[ ] Does feature selection improve NNet model? 
-[ ] Try KNN, SVM, baselines 
-[ ] Work on DNA Methylation data 
+## Todo:  
+- [ ] Does feature selection improve random forest model? 
+- [ ] Does feature selection improve NNet model? 
+- [ ] Try KNN, SVM, baselines 
+- [ ] Work on DNA Methylation data 
 
 
