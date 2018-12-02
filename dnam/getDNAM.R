@@ -1,5 +1,8 @@
+# Use Methylation download function from TCGA2STAT package
+# http://www.liuzlab.org/TCGA2STAT/ 
 source('tcga2stat.R')
 
+# Disease code to download
 CODE = "LUAD"
 #methyl <- getTCGA(disease="xxxx", data.type="Methylation", type="450K")
 methyl <- getTCGA(disease=CODE, data.type="Methylation")

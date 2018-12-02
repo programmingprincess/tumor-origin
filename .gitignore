@@ -4,6 +4,7 @@ myenv
 *.tar.gz
 *.RData
 *.ipynb_checkpoints* 
+*.db
 
 ESCA_20160128-Methylation.txt
 ov-methyl.txt
