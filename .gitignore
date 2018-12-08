@@ -6,6 +6,7 @@ myenv
 *.ipynb_checkpoints* 
 *.db
 *.R~
+*.sh
 
 ESCA_20160128-Methylation.txt
 ov-methyl.txt
