@@ -1,5 +1,9 @@
 # Neural Networks for detecting tumor origin 
 
+MircoRNA results available in `analysis.ipynb`, viewable [here](https://nbviewer.jupyter.org/github/programmingprincess/tumor-origin/blob/master/analysis.ipynb)
+
+DNAm results availabile in `analysis-dnam.ipynb`, viewable [here](https://nbviewer.jupyter.org/github/programmingprincess/tumor-origin/blob/master/analysis-dnam.ipynb) 
+
 ## Workflow: 
 
 #### MicroRNA  
