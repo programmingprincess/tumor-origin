@@ -28,9 +28,10 @@
 
 
 ## Todo:  
-- [ ] Does feature selection improve random forest model? 
-- [ ] Does feature selection improve NNet model? 
-- [ ] Try KNN, SVM, baselines 
-- [ ] Work on DNA Methylation data 
+- [x] Does feature selection improve random forest model? 
+- [x] Does feature selection improve NNet model? 
+- [x] Try KNN, SVM, baselines 
+- [x] Work on DNA Methylation data 
+
 
 
