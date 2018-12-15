@@ -6,6 +6,8 @@ DNAm results availabile in `analysis-dnam.ipynb`, viewable [here](https://nbview
 
 ## Workflow: 
 
+This project uses virtualenv to create isolated Python environments.		
+
 #### MicroRNA  
 * Download isoforms from 17 different classes of cancer from TCGA 
 
