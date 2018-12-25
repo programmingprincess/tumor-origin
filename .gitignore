@@ -1,7 +1,7 @@
 myenv
 archive
 db
-*.un~
+*~
 *.RData
 *.un~
 .Rhistory
