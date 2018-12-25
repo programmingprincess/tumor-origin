@@ -48,7 +48,7 @@ This project uses virtualenv to create isolated Python environments.
 ## Todo:  
 - [x] Does feature selection improve random forest model? 
 - [x] Does feature selection improve NNet model?
-- [ ] Scaling (0,1)
+- [x] Scaling (0,1)
 - [x] Try KNN, SVM, baselines 
 - [ ] High variability feature selection 
 - [x] Process methylation data 
